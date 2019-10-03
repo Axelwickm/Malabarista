@@ -26,16 +26,15 @@ public class Spawner : MonoBehaviour
             int wpIndex = Random.Range(0, gameObject.transform.childCount - 1);
             Vector3 position = gameObject.transform.GetChild(wpIndex).transform.position;
 
-            Instantiate(Pedestrian, position, Quaternion.identity);
-            print("Made pedestrian!");
+            GameObject newPedestrian = Instantiate(Pedestrian, position, Quaternion.identity);
+            newPedestrian.GetComponent<Pedestrian>().spawner = this;
             currentPedestrians++;
         }
     }
 
     // Pedestrian just done with life
-    void DoneWithLife()
+    public void DoneWithLife()
     {
         currentPedestrians--;
-        print(":( it died");
     }
 }

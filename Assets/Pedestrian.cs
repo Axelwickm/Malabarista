@@ -6,13 +6,13 @@ public class Pedestrian : MonoBehaviour
 {
     public Spawner spawner;
     private GameObject goalWaypoint;
-    private NavMeshAgent nmAgent;
+    private UnityEngine.AI.NavMeshAgent nmAgent;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        nmAgent = GetComponent<NavMeshAgent>();
+        nmAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         // Choose where to go
         int wpIndex = Random.Range(0, spawner.gameObject.transform.childCount-1);
         goalWaypoint = spawner.gameObject.transform.GetChild(wpIndex).gameObject;
@@ -22,6 +22,16 @@ public class Pedestrian : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (!nmAgent.pathPending)
+        {
+            if (nmAgent.remainingDistance <= nmAgent.stoppingDistance)
+            {
+                if (!nmAgent.hasPath || nmAgent.velocity.sqrMagnitude == 0f)
+                {
+                    spawner.DoneWithLife();
+                    Destroy(gameObject);
+                }
+            }
+        }
     }
 }
