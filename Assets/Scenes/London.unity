@@ -835,8 +835,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f07785e96fd91b7448acbea50f125f0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxPedestrians: 55
-  spawnRate: 1.2
+  MaxPedestrians: 12
+  spawnRate: 0.1
   Pedestrian: {fileID: 9014143714350053169, guid: 1d0fce5b531562142a15ac8c6d563717,
     type: 3}
 --- !u!4 &1829888041
