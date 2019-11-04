@@ -11,8 +11,11 @@ public class Pedestrian : MonoBehaviour
     public const float physicsModeDistance = 1.3F;
 
     public List<GameObject> bodies;
+    public List<GameObject> hairs;
+    public GameObject boringHair;
 
     private GameObject body;
+    private GameObject hair;
 
 
     private GameObject goalWaypoint;
@@ -37,12 +40,30 @@ public class Pedestrian : MonoBehaviour
         gatherPoint = GameObject.Find("GatherPoint");
         rb = GetComponent<Rigidbody>();
 
-        // Load objects
-        int index = Random.Range(0, (bodies.Count - 1));
-        body = Instantiate(bodies[index], new Vector3(0, 0, 0), Quaternion.identity);
-        body.transform.position = transform.position;
+        Bounds bounds = GetComponent<Collider>().bounds;
+        Vector3 feetPosition = bounds.center  - new Vector3(0.0f,  bounds.extents.y, 0.0f);
+        int index;
+
+        // Load body parts
+        index = (int) Mathf.Floor(Random.Range(0, 199) / 100);
+        body = Instantiate(bodies[index], feetPosition, Quaternion.identity);
         body.transform.parent = transform;
 
+        if (Random.value < 1.0/150.0)
+        {
+            hair = Instantiate(boringHair, feetPosition, Quaternion.Euler(-90, 0, 0));
+            hair.transform.parent = transform;
+        }
+        else
+        {
+            index = Random.Range(0, (hairs.Count - 1));
+            if (hairs[index] != null)
+            {
+                hair = Instantiate(hairs[index], feetPosition, Quaternion.Euler(-90, 0, 0));
+                hair.transform.parent = transform;
+            }
+
+        }
 
         // Choose where to go
         int wpIndex = Random.Range(0, spawner.gameObject.transform.childCount - 1);

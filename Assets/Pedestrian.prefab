@@ -18,7 +18,7 @@ GameObject:
   m_Layer: 0
   m_Name: Pedestrian
   m_TagString: Untagged
-  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -73,6 +73,19 @@ MonoBehaviour:
   spawner: {fileID: 0}
   bodies:
   - {fileID: -927199367670048503, guid: 40b7fb3aa1b53e745bceeab7b73eee0b, type: 3}
+  - {fileID: -927199367670048503, guid: e925103b45e65fd48bbfa7eca4326d73, type: 3}
+  hairs:
+  - {fileID: 0}
+  - {fileID: -927199367670048503, guid: 0fd826c381e190c42bade14a62e9e8d6, type: 3}
+  - {fileID: -927199367670048503, guid: 9363695f4a108c442b79724efabb15f6, type: 3}
+  - {fileID: -927199367670048503, guid: a648a0084c12a0142b583cf2411e2e56, type: 3}
+  - {fileID: -927199367670048503, guid: 59bb9b6d239f29c4daaba8b676e6b8c6, type: 3}
+  - {fileID: -927199367670048503, guid: 97d9e551b2557424eb9ec4ee70cb478a, type: 3}
+  - {fileID: -927199367670048503, guid: 97d9e551b2557424eb9ec4ee70cb478a, type: 3}
+  - {fileID: -927199367670048503, guid: 97d9e551b2557424eb9ec4ee70cb478a, type: 3}
+  - {fileID: -927199367670048503, guid: 17aff947c01583947839bfe1d89a5770, type: 3}
+  boringHair: {fileID: -927199367670048503, guid: b0c1dbe5d35134c4ca766f093c8c72d3,
+    type: 3}
 --- !u!208 &5090160681961844905
 NavMeshObstacle:
   m_ObjectHideFlags: 0
