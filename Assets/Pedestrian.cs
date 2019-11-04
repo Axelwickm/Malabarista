@@ -10,6 +10,10 @@ public class Pedestrian : MonoBehaviour
     public const float loseInterestChance = 0.04F; // Per second;
     public const float physicsModeDistance = 1.3F;
 
+    public List<GameObject> bodies;
+
+    private GameObject body;
+
 
     private GameObject goalWaypoint;
     private UnityEngine.AI.NavMeshAgent nmAgent;
@@ -32,6 +36,13 @@ public class Pedestrian : MonoBehaviour
         nmAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         gatherPoint = GameObject.Find("GatherPoint");
         rb = GetComponent<Rigidbody>();
+
+        // Load objects
+        int index = Random.Range(0, (bodies.Count - 1));
+        body = Instantiate(bodies[index], new Vector3(0, 0, 0), Quaternion.identity);
+        body.transform.position = transform.position;
+        body.transform.parent = transform;
+
 
         // Choose where to go
         int wpIndex = Random.Range(0, spawner.gameObject.transform.childCount - 1);
