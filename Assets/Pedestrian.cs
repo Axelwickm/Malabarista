@@ -10,6 +10,8 @@ public class Pedestrian : MonoBehaviour
     public const float loseInterestChance = 0.04F; // Per second;
     public const float physicsModeDistance = 1.3F;
 
+    public GameObject PlayerHead;
+
     public List<GameObject> bodies;
     public List<GameObject> hairs;
     public GameObject boringHair;
@@ -38,6 +40,7 @@ public class Pedestrian : MonoBehaviour
     {
         nmAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         gatherPoint = GameObject.Find("GatherPoint");
+        PlayerHead = GameObject.Find("PlayerHeadPlaceholder");
         rb = GetComponent<Rigidbody>();
 
         Bounds bounds = GetComponent<Collider>().bounds;
@@ -49,7 +52,7 @@ public class Pedestrian : MonoBehaviour
         body = Instantiate(bodies[index], feetPosition, Quaternion.identity);
         body.transform.parent = transform;
 
-        if (Random.value < 1.0/150.0)
+        if (Random.value < 1.0/500.0)
         {
             hair = Instantiate(boringHair, feetPosition, Quaternion.Euler(-90, 0, 0));
             hair.transform.parent = transform;
@@ -135,9 +138,14 @@ public class Pedestrian : MonoBehaviour
 
             if (Random.value < loseInterestChance * Time.fixedDeltaTime)
             {
-                nmAgent.destination = goalWaypoint.transform.position;
                 mode = ModeEnum.MovingToWaypoint;
+                nmAgent.destination = goalWaypoint.transform.position;
             }
+            
+            Vector3 relative2Player = PlayerHead.transform.position - transform.position;
+            relative2Player.y = 0;
+            Vector3 cross = Vector3.Cross(transform.forward, relative2Player);
+            rb.AddTorque(cross*0.03F);
         }
 
         lastPosition = transform.position;
