@@ -10,6 +10,8 @@ public class Pedestrian : MonoBehaviour
     public const float loseInterestChance = 0.04F; // Per second;
     public const float physicsModeDistance = 1.3F;
 
+    private float satisfied = 0;
+
     public GameObject PlayerHead;
 
     public List<GameObject> bodies;
@@ -18,6 +20,7 @@ public class Pedestrian : MonoBehaviour
 
     private GameObject body;
     private GameObject hair;
+    private SkinnedMeshRenderer facial;
 
 
     private GameObject goalWaypoint;
@@ -68,6 +71,16 @@ public class Pedestrian : MonoBehaviour
 
         }
 
+        facial = null;
+        if (body.transform.Find("Body").GetComponent<SkinnedMeshRenderer>() != null)
+        {
+            facial = body.transform.Find("Body").GetComponent<SkinnedMeshRenderer>();
+        }
+        else
+        {
+            print("Weird");
+        }
+        
         // Choose where to go
         int wpIndex = Random.Range(0, spawner.gameObject.transform.childCount - 1);
         goalWaypoint = spawner.gameObject.transform.GetChild(wpIndex).gameObject;
@@ -124,6 +137,8 @@ public class Pedestrian : MonoBehaviour
                 {
                     mode = ModeEnum.WatchingPlayer;
                     print("In physics mode");
+                    satisfied = Random.value * 2.0f - 1.0f;
+
                 }
             }
         }
@@ -139,6 +154,7 @@ public class Pedestrian : MonoBehaviour
             if (Random.value < loseInterestChance * Time.fixedDeltaTime)
             {
                 mode = ModeEnum.MovingToWaypoint;
+                satisfied = 0;
                 nmAgent.destination = goalWaypoint.transform.position;
             }
             
@@ -147,8 +163,22 @@ public class Pedestrian : MonoBehaviour
             Vector3 cross = Vector3.Cross(transform.forward, relative2Player);
             rb.AddTorque(cross*0.03F);
         }
+        satisfied += (Random.value * 2.0f - 1.0f)/4.0f;
 
         lastPosition = transform.position;
+        if (facial != null)
+        {
+            // Set facial expression
+            float smile = facial.GetBlendShapeWeight(0);
+            smile += (Mathf.Max(satisfied*100, 0) - smile) * Time.deltaTime * 100;
+            smile = Mathf.Max(Mathf.Min(smile, 100), 0);
+            facial.SetBlendShapeWeight(0, smile);
+
+            float frown = facial.GetBlendShapeWeight(1);
+            frown += (-Mathf.Min(satisfied * 100, 0) - frown) * Time.deltaTime * 100;
+            frown = Mathf.Max(Mathf.Min(frown, 100), 0);
+            facial.SetBlendShapeWeight(1, frown);
+        }
         
     }
 
