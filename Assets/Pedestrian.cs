@@ -10,9 +10,14 @@ public class Pedestrian : MonoBehaviour
     public const float loseInterestChance = 0.04F; // Per second;
     public const float physicsModeDistance = 1.3F;
 
+    public GameObject PlayerHead;
+
     public List<GameObject> bodies;
+    public List<GameObject> hairs;
+    public GameObject boringHair;
 
     private GameObject body;
+    private GameObject hair;
 
 
     private GameObject goalWaypoint;
@@ -35,14 +40,33 @@ public class Pedestrian : MonoBehaviour
     {
         nmAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         gatherPoint = GameObject.Find("GatherPoint");
+        PlayerHead = GameObject.Find("PlayerHeadPlaceholder");
         rb = GetComponent<Rigidbody>();
 
-        // Load objects
-        int index = Random.Range(0, (bodies.Count - 1));
-        body = Instantiate(bodies[index], new Vector3(0, 0, 0), Quaternion.identity);
-        body.transform.position = transform.position;
+        Bounds bounds = GetComponent<Collider>().bounds;
+        Vector3 feetPosition = bounds.center  - new Vector3(0.0f,  bounds.extents.y, 0.0f);
+        int index;
+
+        // Load body parts
+        index = (int) Mathf.Floor(Random.Range(0, 199) / 100);
+        body = Instantiate(bodies[index], feetPosition, Quaternion.identity);
         body.transform.parent = transform;
 
+        if (Random.value < 1.0/500.0)
+        {
+            hair = Instantiate(boringHair, feetPosition, Quaternion.Euler(-90, 0, 0));
+            hair.transform.parent = transform;
+        }
+        else
+        {
+            index = Random.Range(0, (hairs.Count - 1));
+            if (hairs[index] != null)
+            {
+                hair = Instantiate(hairs[index], feetPosition, Quaternion.Euler(-90, 0, 0));
+                hair.transform.parent = transform;
+            }
+
+        }
 
         // Choose where to go
         int wpIndex = Random.Range(0, spawner.gameObject.transform.childCount - 1);
@@ -114,9 +138,14 @@ public class Pedestrian : MonoBehaviour
 
             if (Random.value < loseInterestChance * Time.fixedDeltaTime)
             {
-                nmAgent.destination = goalWaypoint.transform.position;
                 mode = ModeEnum.MovingToWaypoint;
+                nmAgent.destination = goalWaypoint.transform.position;
             }
+            
+            Vector3 relative2Player = PlayerHead.transform.position - transform.position;
+            relative2Player.y = 0;
+            Vector3 cross = Vector3.Cross(transform.forward, relative2Player);
+            rb.AddTorque(cross*0.03F);
         }
 
         lastPosition = transform.position;
