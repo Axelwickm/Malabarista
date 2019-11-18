@@ -6,8 +6,8 @@ public class Pedestrian : MonoBehaviour
 {
     public Spawner spawner;
     public const int maxInterestDistance = 14;
-    public const float interestChance = 0.15F; // Per second;
-    public const float loseInterestChance = 0.04F; // Per second;
+    public const float interestChance = 0.3F; // Per second;
+    public const float loseInterestChance = 0.05F; // Per second;
     public const float physicsModeDistance = 1.3F;
 
     private float satisfied = 0;
@@ -20,6 +20,8 @@ public class Pedestrian : MonoBehaviour
 
     private GameObject body;
     private GameObject hair;
+    private GameObject eyeRight;
+    private GameObject eyeLeft;
     private SkinnedMeshRenderer facial;
 
 
@@ -37,6 +39,7 @@ public class Pedestrian : MonoBehaviour
         WatchingPlayer
     };
     private ModeEnum mode;
+    public string modeViz = "";
 
     // Start is called before the first frame update
     void Start()
@@ -54,6 +57,8 @@ public class Pedestrian : MonoBehaviour
         index = (int) Mathf.Floor(Random.Range(0, 199) / 100);
         body = Instantiate(bodies[index], feetPosition, Quaternion.identity);
         body.transform.parent = transform;
+        eyeRight = body.transform.Find("EyeRight").gameObject;
+        eyeLeft = body.transform.Find("EyeLeft").gameObject;
 
         if (Random.value < 1.0/500.0)
         {
@@ -121,6 +126,7 @@ public class Pedestrian : MonoBehaviour
                             {
                                 nmAgent.destination = gatherPoint.transform.position;
                                 mode = ModeEnum.MovingToPlayer;
+                                print("Moving to player");
                             }
                         }
                     }
@@ -138,7 +144,8 @@ public class Pedestrian : MonoBehaviour
                     mode = ModeEnum.WatchingPlayer;
                     print("In physics mode");
                     satisfied = Random.value * 2.0f - 1.0f;
-
+                    nmAgent.isStopped = true;
+                    nmAgent.ResetPath();
                 }
             }
         }
@@ -146,22 +153,41 @@ public class Pedestrian : MonoBehaviour
         {
             // Move towards gather point
             Vector3 toGather = transform.position - gatherPoint.transform.position;
-            Vector3 toNormGather = toGather.normalized;
-            toGather = Vector3.Min(toNormGather, toNormGather * toGather.magnitude * 1.0F);
 
+            if (toGather.magnitude < physicsModeDistance)
+            {
+                toGather = new Vector3(0, 0, 0);
+            }
+
+            Vector3 toNormGather = Vector3.Min(toGather*0.1f, new Vector3(0.3f, 0.3f, 0.3f));
             rb.AddForce(-toNormGather, ForceMode.Acceleration);
 
+            // Turn towards player
+            Vector3 relative2Player = PlayerHead.transform.position - transform.position;
+            relative2Player.y = 0;
+            Vector3 cross = Vector3.Cross(transform.forward, relative2Player);
+            if (Mathf.Abs(rb.angularVelocity.y) < 0.5)
+            {
+                rb.AddTorque(cross * 0.03F);
+            };
+
+            // Turn eyes towards player
+            Vector3 eyeRightDelta = PlayerHead.transform.position - eyeRight.transform.position;
+            Vector3 eyeLeftDelta = PlayerHead.transform.position - eyeLeft.transform.position;
+            eyeRight.transform.rotation = Quaternion.LookRotation(eyeRightDelta) * Quaternion.Euler(-90, 0, 0);
+            eyeLeft.transform.rotation = Quaternion.LookRotation(eyeLeftDelta) * Quaternion.Euler(-90, 0, 0);
+
+
+            // Maybe lose interest
             if (Random.value < loseInterestChance * Time.fixedDeltaTime)
             {
                 mode = ModeEnum.MovingToWaypoint;
                 satisfied = 0;
                 nmAgent.destination = goalWaypoint.transform.position;
+                eyeLeft.transform.localRotation = Quaternion.Euler(-90, 0, 0);
+                eyeRight.transform.localRotation = Quaternion.Euler(-90, 0, 0);
+                print("Lost interest");
             }
-            
-            Vector3 relative2Player = PlayerHead.transform.position - transform.position;
-            relative2Player.y = 0;
-            Vector3 cross = Vector3.Cross(transform.forward, relative2Player);
-            rb.AddTorque(cross*0.03F);
         }
         satisfied += (Random.value * 2.0f - 1.0f)/4.0f;
 
@@ -179,6 +205,8 @@ public class Pedestrian : MonoBehaviour
             frown = Mathf.Max(Mathf.Min(frown, 100), 0);
             facial.SetBlendShapeWeight(1, frown);
         }
+
+        modeViz = mode.ToString();
         
     }
 
