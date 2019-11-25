@@ -46,7 +46,7 @@ public class Pedestrian : MonoBehaviour
     {
         nmAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         gatherPoint = GameObject.Find("GatherPoint");
-        PlayerHead = GameObject.Find("PlayerHeadPlaceholder");
+        PlayerHead = GameObject.Find("VRCamera");
         rb = GetComponent<Rigidbody>();
 
         Bounds bounds = GetComponent<Collider>().bounds;
@@ -162,20 +162,24 @@ public class Pedestrian : MonoBehaviour
             Vector3 toNormGather = Vector3.Min(toGather*0.1f, new Vector3(0.3f, 0.3f, 0.3f));
             rb.AddForce(-toNormGather, ForceMode.Acceleration);
 
-            // Turn towards player
-            Vector3 relative2Player = PlayerHead.transform.position - transform.position;
-            relative2Player.y = 0;
-            Vector3 cross = Vector3.Cross(transform.forward, relative2Player);
-            if (Mathf.Abs(rb.angularVelocity.y) < 0.5)
+            if (PlayerHead != null) // If no VR-headset is connected
             {
-                rb.AddTorque(cross * 0.03F);
-            };
+                // Turn towards player
+                Vector3 relative2Player = PlayerHead.transform.position - transform.position;
+                relative2Player.y = 0;
+                Vector3 cross = Vector3.Cross(transform.forward, relative2Player);
+                if (Mathf.Abs(rb.angularVelocity.y) < 0.5)
+                {
+                    rb.AddTorque(cross * 0.03F);
+                };
 
-            // Turn eyes towards player
-            Vector3 eyeRightDelta = PlayerHead.transform.position - eyeRight.transform.position;
-            Vector3 eyeLeftDelta = PlayerHead.transform.position - eyeLeft.transform.position;
-            eyeRight.transform.rotation = Quaternion.LookRotation(eyeRightDelta) * Quaternion.Euler(-90, 0, 0);
-            eyeLeft.transform.rotation = Quaternion.LookRotation(eyeLeftDelta) * Quaternion.Euler(-90, 0, 0);
+                // Turn eyes towards player
+                Vector3 eyeRightDelta = PlayerHead.transform.position - eyeRight.transform.position;
+                Vector3 eyeLeftDelta = PlayerHead.transform.position - eyeLeft.transform.position;
+                eyeRight.transform.rotation = Quaternion.LookRotation(eyeRightDelta) * Quaternion.Euler(-90, 0, 0);
+                eyeLeft.transform.rotation = Quaternion.LookRotation(eyeLeftDelta) * Quaternion.Euler(-90, 0, 0);
+            }
+            
 
 
             // Maybe lose interest
