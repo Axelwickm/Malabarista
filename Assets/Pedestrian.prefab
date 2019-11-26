@@ -51,14 +51,13 @@ MonoBehaviour:
   PlayerHead: {fileID: 0}
   bodies:
   - {fileID: -927199367670048503, guid: 40b7fb3aa1b53e745bceeab7b73eee0b, type: 3}
-  - {fileID: -927199367670048503, guid: e925103b45e65fd48bbfa7eca4326d73, type: 3}
+  - {fileID: -927199367670048503, guid: 8cb5a563383b0c845a2f9f012f954ac4, type: 3}
   hairs:
   - {fileID: 0}
   - {fileID: -927199367670048503, guid: 0fd826c381e190c42bade14a62e9e8d6, type: 3}
   - {fileID: -927199367670048503, guid: 9363695f4a108c442b79724efabb15f6, type: 3}
   - {fileID: -927199367670048503, guid: a648a0084c12a0142b583cf2411e2e56, type: 3}
   - {fileID: -927199367670048503, guid: 59bb9b6d239f29c4daaba8b676e6b8c6, type: 3}
-  - {fileID: -927199367670048503, guid: 97d9e551b2557424eb9ec4ee70cb478a, type: 3}
   - {fileID: -927199367670048503, guid: 97d9e551b2557424eb9ec4ee70cb478a, type: 3}
   - {fileID: -927199367670048503, guid: 97d9e551b2557424eb9ec4ee70cb478a, type: 3}
   - {fileID: -927199367670048503, guid: 17aff947c01583947839bfe1d89a5770, type: 3}
