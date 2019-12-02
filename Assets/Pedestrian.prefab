@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5204559475309708666}
   - component: {fileID: -7184535734640596606}
   - component: {fileID: 7835791359245700440}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pedestrian
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawner: {fileID: 0}
+  gameController: {fileID: 0}
   PlayerHead: {fileID: 0}
   bodies:
   - {fileID: -927199367670048503, guid: 40b7fb3aa1b53e745bceeab7b73eee0b, type: 3}
