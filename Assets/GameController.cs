@@ -6,16 +6,20 @@ public class GameController : MonoBehaviour
 {
     public int historicalPoints = 10;
     public float recordInterval = 3.0f;
+    public TextMesh pointsIndicator;
 
-    public float points = 0;
+    private float points = 0;
     private Queue<float> pointHistory = new Queue<float>();
     private float lastHistoryTime;
+
+
 
     // Start is called before the first frame update
     void Start()
     {
         pointHistory.Enqueue(points);
         lastHistoryTime = Time.time;
+        UpdateText();
     }
 
     // Update is called once per frame
@@ -37,7 +41,7 @@ public class GameController : MonoBehaviour
     }
 
 
-    public void GetPointGain()
+    public float GetPointGain()
     {
         float a = 0;
         foreach (float p in pointHistory)
@@ -52,6 +56,12 @@ public class GameController : MonoBehaviour
     public void AddPoints(float p)
     {
         points += p;
+        UpdateText();
         Debug.Log("Player points: " + points);
-    }   
+    }
+
+    private void UpdateText()
+    {
+        pointsIndicator = "Points: " + Mathf.Round(points);
+    }
 }
