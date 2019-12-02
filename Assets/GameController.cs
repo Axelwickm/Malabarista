@@ -35,9 +35,6 @@ public class GameController : MonoBehaviour
         {
             pointHistory.Dequeue();
         }
-
-
-        // TODO: Render on screen
     }
 
 
