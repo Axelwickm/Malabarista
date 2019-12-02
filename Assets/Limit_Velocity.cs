@@ -19,6 +19,7 @@ public class Limit_Velocity : MonoBehaviour
     public Vector3 endPoint;
     public Vector3 heightVector; 
     public float count;
+    public bool followTrajectory;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +28,7 @@ public class Limit_Velocity : MonoBehaviour
         Time.timeScale = 1.0f;
         //Time.fixedDeltaTime = 0.7f;
         heightFactor = 1.0f;
+        followTrajectory = false;
         count = 2.0f;
         startPoint = new Vector3(0.0f, 0.0f, 0.0f);
         endPoint = new Vector3(10.0f, 10.0f, 10.0f);
@@ -41,7 +43,7 @@ public class Limit_Velocity : MonoBehaviour
         
         
    
-        if (count < 1.0f)
+        if (count < 1.0f && followTrajectory)
         {
             
             height = heightVector.magnitude * heightFactor;

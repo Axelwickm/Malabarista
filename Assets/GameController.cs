@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour
     }
 
 
-    public void GetPointGain()
+    public float GetPointGain()
     {
         float a = 0;
         foreach (float p in pointHistory)
