@@ -12,6 +12,7 @@ public class Pedestrian : MonoBehaviour
 
     private float satisfied = 0;
 
+    public GameController gameController;
     public GameObject PlayerHead;
 
     public List<GameObject> bodies;
@@ -46,6 +47,7 @@ public class Pedestrian : MonoBehaviour
     {
         nmAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         gatherPoint = GameObject.Find("GatherPoint");
+        gameController = GameObject.Find("OurPlayer").GetComponent<GameController>();
         PlayerHead = GameObject.Find("VRCamera");
         rb = GetComponent<Rigidbody>();
 
@@ -151,6 +153,12 @@ public class Pedestrian : MonoBehaviour
         }
         else if (mode == ModeEnum.WatchingPlayer)
         {
+            // Change satisfaction
+            float pointGain = gameController.GetPointGain();
+            print(pointGain);
+            satisfied += pointGain - 1.0;
+
+
             // Move towards gather point
             Vector3 toGather = transform.position - gatherPoint.transform.position;
 
@@ -193,7 +201,6 @@ public class Pedestrian : MonoBehaviour
                 print("Lost interest");
             }
         }
-        satisfied += (Random.value * 2.0f - 1.0f)/4.0f;
 
         lastPosition = transform.position;
         if (facial != null)
