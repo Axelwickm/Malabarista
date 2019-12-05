@@ -15,6 +15,7 @@ public class Limit_Velocity : MonoBehaviour
     public float heightFactor;
     private float height;
     public GameObject respawnPlace;
+    private float touchedFloorTime;
 
     public Vector3 startPoint; 
     public Vector3 endPoint;
@@ -61,8 +62,21 @@ public class Limit_Velocity : MonoBehaviour
 
         if(Mathf.Abs(rg.position.x - player.position.x) > 2 && Mathf.Abs(rg.position.z - player.position.z) > 2 || rg.position.y < -2)
         {
-            rg.position = respawnPlace.transform.position + new Vector3(0.2f*(Random.value-0.5f), 0, 0.2f*(Random.value - 0.5f));
-            rg.velocity = Vector3.zero;
+            Respawn();
+        }
+
+        if (rg.position.y < 1.0)
+        {
+            touchedFloorTime += Time.deltaTime;
+        }
+        else
+        {
+            touchedFloorTime = 0;
+        }
+
+        if (3 < touchedFloorTime)
+        {
+            Respawn();
         }
 
         /*if (rg.velocity.y > max_Velocity)
@@ -98,6 +112,12 @@ public class Limit_Velocity : MonoBehaviour
         //{
 
         //}*/
+    }
+
+    public void Respawn()
+    {
+        rg.position = respawnPlace.transform.position + new Vector3(0.2f * (Random.value - 0.5f), 0, 0.2f * (Random.value - 0.5f));
+        rg.velocity = Vector3.zero;
     }
 
 }

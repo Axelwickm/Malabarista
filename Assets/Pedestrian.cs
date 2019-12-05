@@ -225,6 +225,7 @@ public class Pedestrian : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+
         if (mode != ModeEnum.WatchingPlayer)
         {
             return;
@@ -235,7 +236,7 @@ public class Pedestrian : MonoBehaviour
             if (contact.otherCollider.gameObject.name.StartsWith("Sphere"))
             {
                 satisfied -= 2.0f;
-                Debug.Log("Got hit. Now angry. >:(");
+                Debug.Log("Now angry. >:(");
             }
             /*if (contact.otherCollider.gameObject.name == gameObject.name)
             {
