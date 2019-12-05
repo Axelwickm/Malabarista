@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour
     public float hVecMag;
 
     private float points = 0;
+    private float pointsLast = 0;
     private Queue<float> pointHistory = new Queue<float>();
     private float lastHistoryTime;
 
@@ -19,7 +20,7 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        pointHistory.Enqueue(points);
+        pointHistory.Enqueue(points - pointsLast);
         lastHistoryTime = Time.time;
         UpdateText();
     }
@@ -29,8 +30,10 @@ public class GameController : MonoBehaviour
     {
         if (lastHistoryTime+recordInterval < Time.time)
         {
-            pointHistory.Enqueue(points);
+            pointHistory.Enqueue(points - pointsLast);
+            pointsLast = points;
             lastHistoryTime = Time.time;
+            UpdateText();
         }
 
         if (historicalPoints < pointHistory.Count)
@@ -38,7 +41,7 @@ public class GameController : MonoBehaviour
             pointHistory.Dequeue();
         }
 
-        UpdateText();
+        
     }
 
 

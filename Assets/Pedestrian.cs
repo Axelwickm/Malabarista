@@ -11,6 +11,7 @@ public class Pedestrian : MonoBehaviour
     public const float physicsModeDistance = 1.3F;
 
     private float satisfied = 0;
+    private bool beenInterested = true;
 
     public GameController gameController;
     public GameObject PlayerHead;
@@ -118,7 +119,7 @@ public class Pedestrian : MonoBehaviour
                     // Become interested in the player?
                     Vector3 diff = transform.position - gatherPoint.transform.position;
                     float distanceToGather = diff.magnitude;
-                    if (distanceToGather < maxInterestDistance)
+                    if (distanceToGather < maxInterestDistance && !beenInterested)
                     {
                         Vector3 velocity = (transform.position - lastPosition) / Time.fixedDeltaTime;
                         if (0.0 < Vector3.Dot(diff.normalized, velocity.normalized))
@@ -144,6 +145,7 @@ public class Pedestrian : MonoBehaviour
                 if (diff.magnitude < physicsModeDistance)
                 {
                     mode = ModeEnum.WatchingPlayer;
+                    beenInterested = true;
                     print("In physics mode");
                     satisfied = Random.value * 2.0f - 1.0f;
                     nmAgent.isStopped = true;
@@ -155,9 +157,9 @@ public class Pedestrian : MonoBehaviour
         {
             // Change satisfaction
             float pointGain = gameController.GetPointGain();
-            float supposed = 2.0f / (1 + Mathf.Exp(-0.06f * (pointGain - 75.0f))) - 1.0f;
-            float satisfiedDelta = (supposed - satisfied) / 10.0f;
-            Debug.Log(pointGain+"   "+satisfiedDelta);
+            float supposed = 2.0f / (1 + Mathf.Exp(-0.3f * (pointGain - 5.5f))) - 1.0f;
+            float satisfiedDelta = (supposed - satisfied) / 5.0f;
+            Debug.Log(pointGain+"   "+satisfiedDelta + " "+supposed);
             satisfied += satisfiedDelta * Time.deltaTime;
 
             // Move towards gather point
