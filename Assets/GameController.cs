@@ -35,6 +35,8 @@ public class GameController : MonoBehaviour
         {
             pointHistory.Dequeue();
         }
+
+        UpdateText();
     }
 
 
@@ -59,6 +61,6 @@ public class GameController : MonoBehaviour
 
     private void UpdateText()
     {
-        pointsIndicator = "Points: " + Mathf.Round(points);
+        pointsIndicator.text = "Points: " + Mathf.Round(points) + "\nGain: "+GetPointGain();
     }
 }

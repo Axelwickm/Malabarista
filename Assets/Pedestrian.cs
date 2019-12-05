@@ -157,9 +157,10 @@ public class Pedestrian : MonoBehaviour
         {
             // Change satisfaction
             float pointGain = gameController.GetPointGain();
-            Debug.Log(pointGain);
-            satisfied += pointGain - 1.0f;
-
+            float supposed = 2.0f / (1 + Mathf.Exp(-0.06f * (pointGain - 75.0f))) - 1.0f;
+            float satisfiedDelta = (supposed - satisfied) / 10.0f;
+            Debug.Log(pointGain+"   "+satisfiedDelta);
+            satisfied += satisfiedDelta * Time.deltaTime;
 
             // Move towards gather point
             Vector3 toGather = transform.position - gatherPoint.transform.position;
@@ -232,14 +233,19 @@ public class Pedestrian : MonoBehaviour
 
         foreach (ContactPoint contact in collision.contacts)
         {
-            if (contact.otherCollider.gameObject.name == gameObject.name)
+            if (contact.otherCollider.gameObject.name.StartsWith("Sphere"))
+            {
+                satisfied -= 2.0f;
+                Debug.Log("Got hit. Now angry. >:(");
+            }
+            /*if (contact.otherCollider.gameObject.name == gameObject.name)
             {
                 Vector3 velDiff = contact.otherCollider.gameObject.GetComponent<Rigidbody>().velocity - rb.velocity;
                 if (.075F < velDiff.magnitude)
                 {
                     rb.AddForce(0.15F * contact.normal, ForceMode.Impulse);
                 }
-            }
+            }*/
         }
     }
 }

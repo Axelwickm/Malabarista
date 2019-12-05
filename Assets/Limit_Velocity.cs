@@ -14,19 +14,23 @@ public class Limit_Velocity : MonoBehaviour
     public Transform player;
     public float heightFactor;
     private float height;
+    public GameObject respawnPlace;
 
     public Vector3 startPoint; 
     public Vector3 endPoint;
     public Vector3 heightVector; 
     public float count;
+    public bool followTrajectory;
     // Start is called before the first frame update
     void Start()
     {
+        respawnPlace = GameObject.Find("BallRespawn");
         rg = GetComponent<Rigidbody>();
         transf = GetComponent<Transform>();
         Time.timeScale = 1.0f;
         //Time.fixedDeltaTime = 0.7f;
         heightFactor = 1.0f;
+        followTrajectory = false;
         count = 2.0f;
         startPoint = new Vector3(0.0f, 0.0f, 0.0f);
         endPoint = new Vector3(10.0f, 10.0f, 10.0f);
@@ -41,12 +45,12 @@ public class Limit_Velocity : MonoBehaviour
         
         
    
-        if (count < 1.0f)
+        if (count < 1.0f && followTrajectory)
         {
             
             height = heightVector.magnitude * heightFactor;
             middlePoint = startPoint + (endPoint - startPoint) / 2 + Vector3.up * height;
-            count += 0.3f * Time.deltaTime;
+            count += 0.4f * Time.deltaTime;
            
             Debug.Log(startPoint.ToString());
             Vector3 m1 = Vector3.Lerp(startPoint, middlePoint, count);
@@ -54,9 +58,9 @@ public class Limit_Velocity : MonoBehaviour
             rg.position = Vector3.Lerp(m1, m2, count);
         }
 
-        if(Mathf.Abs(rg.position.x - player.position.x) > 2 && Mathf.Abs(rg.position.z - player.position.z) > 2)
+        if(Mathf.Abs(rg.position.x - player.position.x) > 2 && Mathf.Abs(rg.position.z - player.position.z) > 2 || rg.position.y < -2)
         {
-            rg.position = player.position;
+            rg.position = respawnPlace.transform.position + new Vector3(0.2f*(Random.value-0.5f), 0, 0.2f*(Random.value - 0.5f));
             rg.velocity = Vector3.zero;
         }
 
