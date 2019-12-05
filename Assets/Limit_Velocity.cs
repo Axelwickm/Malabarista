@@ -49,6 +49,7 @@ public class Limit_Velocity : MonoBehaviour
         {
             
             height = heightVector.magnitude * heightFactor;
+
             middlePoint = startPoint + (endPoint - startPoint) / 2 + Vector3.up * height;
             count += 0.4f * Time.deltaTime;
            

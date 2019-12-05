@@ -7,6 +7,8 @@ public class GameController : MonoBehaviour
     public int historicalPoints = 10;
     public float recordInterval = 3.0f;
     public TextMesh pointsIndicator;
+    public TextMesh hVecMagIndicator;
+    public float hVecMag;
 
     private float points = 0;
     private Queue<float> pointHistory = new Queue<float>();
@@ -62,5 +64,6 @@ public class GameController : MonoBehaviour
     private void UpdateText()
     {
         pointsIndicator.text = "Points: " + Mathf.Round(points) + "\nGain: "+GetPointGain();
+        hVecMagIndicator.text = "hVecMag: " + hVecMag;
     }
 }
