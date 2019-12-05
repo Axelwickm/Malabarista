@@ -51,7 +51,7 @@ public class Limit_Velocity : MonoBehaviour
             height = heightVector.magnitude * heightFactor;
 
             middlePoint = startPoint + (endPoint - startPoint) / 2 + Vector3.up * height;
-            count += 0.4f * Time.deltaTime;
+            count += (0.4f - 0.12f * (heightVector.magnitude - 7.0f)/7.0f)* Time.deltaTime;
            
             Debug.Log(startPoint.ToString());
             Vector3 m1 = Vector3.Lerp(startPoint, middlePoint, count);

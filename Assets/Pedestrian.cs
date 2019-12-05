@@ -11,7 +11,7 @@ public class Pedestrian : MonoBehaviour
     public const float physicsModeDistance = 1.3F;
 
     private float satisfied = 0;
-    private bool beenInterested = true;
+    private bool beenInterested = false;
 
     public GameController gameController;
     public GameObject PlayerHead;
