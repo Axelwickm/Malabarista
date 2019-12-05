@@ -157,10 +157,9 @@ public class Pedestrian : MonoBehaviour
         {
             // Change satisfaction
             float pointGain = gameController.GetPointGain();
-            float supposed = 2.0f / (1 + Mathf.Exp(-0.3f * (pointGain - 5.5f))) - 1.0f;
-            float satisfiedDelta = (supposed - satisfied) / 5.0f;
-            Debug.Log(pointGain+"   "+satisfiedDelta + " "+supposed);
-            satisfied += satisfiedDelta * Time.deltaTime;
+            float supposed = 2.0f / (1 + Mathf.Exp(-0.7f * (pointGain - 5.0f))) - 1.0f;
+            float satisfiedDelta = (supposed - satisfied) / 8.0f * Time.deltaTime;
+            satisfied += satisfiedDelta;
 
             // Move towards gather point
             Vector3 toGather = transform.position - gatherPoint.transform.position;
