@@ -1,9 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public bool logToFile = true;
+    public string path = "./playlogs/log.csv";
+    private StreamWriter writer;
+
+
+
     public int historicalPoints = 10;
     public float recordInterval = 3.0f;
     public TextMesh pointsIndicator;
@@ -23,6 +30,11 @@ public class GameController : MonoBehaviour
         pointHistory.Enqueue(points - pointsLast);
         lastHistoryTime = Time.time;
         UpdateText();
+        if (logToFile)
+        {
+            writer = new StreamWriter(path, false);
+            writer.WriteLine("Time; Points; Gain");
+        }
     }
 
     // Update is called once per frame
@@ -34,6 +46,10 @@ public class GameController : MonoBehaviour
             pointsLast = points;
             lastHistoryTime = Time.time;
             UpdateText();
+            if (logToFile)
+            {
+                writer.WriteLine(lastHistoryTime+"; "+points+"; "+GetPointGain());
+            }
         }
 
         if (historicalPoints < pointHistory.Count)
@@ -41,7 +57,15 @@ public class GameController : MonoBehaviour
             pointHistory.Dequeue();
         }
 
-        
+    }
+
+    public void OnApplicationQuit()
+    {
+        if (logToFile)
+        {
+            Debug.Log("Close file: "+path   );
+            writer.Close();
+        }
     }
 
 
