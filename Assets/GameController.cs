@@ -35,6 +35,8 @@ public class GameController : MonoBehaviour
         {
             pointHistory.Dequeue();
         }
+
+        UpdateText();
     }
 
 
