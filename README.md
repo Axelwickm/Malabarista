@@ -2,6 +2,9 @@
 
 Keep them in the air!
 
+Download Windows build at:
+https://huggarnn.itch.io/o-malabarista
+
 *Project for Universidade de São Paulo class Realidade Virtual (PSI3502)*
 
 
